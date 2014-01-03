@@ -42,7 +42,11 @@ PDCurses portable platform definitions list:
 * User-definable tweak to disable the include of <stdbool.h>.
 */
 #ifndef PDC_ENABLE_STDBOOL_H
+#if defined(_MSC_VER) && _MSC_VER>=1700
 #define PDC_ENABLE_STDBOOL_H 1
+#else
+#define PDC_ENABLE_STDBOOL_H 0
+#endif
 #endif
 
 /*----------------------------------------------------------------------*/
