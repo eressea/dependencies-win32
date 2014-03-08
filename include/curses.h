@@ -42,13 +42,8 @@ PDCurses portable platform definitions list:
 * User-definable tweak to disable the include of <stdbool.h>.
 */
 #ifndef PDC_ENABLE_STDBOOL_H
-#if defined(_MSC_VER) && _MSC_VER>=1700
-#define PDC_ENABLE_STDBOOL_H 1
-#else
 #define PDC_ENABLE_STDBOOL_H 0
 #endif
-#endif
-
 /*----------------------------------------------------------------------*/
 
 #include <stdarg.h>
@@ -60,9 +55,9 @@ PDCurses portable platform definitions list:
 # include <wchar.h>
 #endif
 
-typedef unsigned char PDC_BOOL;
+typedef int PDC_BOOL;
 
-#if defined(__cplusplus)        /* __cplusplus, etc. */
+#if defined(__cplusplus) /* __cplusplus, etc. */
 /* use the C++ compiler's bool type */
 #define PDC_BOOL bool
 #elif PDC_ENABLE_STDBOOL_H
@@ -297,13 +292,13 @@ typedef struct _win       /* definition of a window */
     int   _flags;         /* window properties */
     chtype _attrs;        /* standard attributes and colors */
     chtype _bkgd;         /* background, normally blank */
-    bool  _clear;         /* causes clear at next refresh */
-    bool  _leaveit;       /* leaves cursor where it is */
-    bool  _scroll;        /* allows window scrolling */
-    bool  _nodelay;       /* input character wait flag */
-    bool  _immed;         /* immediate update flag */
-    bool  _sync;          /* synchronise window ancestors */
-    bool  _use_keypad;    /* flags keypad key mode active */
+    PDC_BOOL  _clear;         /* causes clear at next refresh */
+    PDC_BOOL  _leaveit;       /* leaves cursor where it is */
+    PDC_BOOL  _scroll;        /* allows window scrolling */
+    PDC_BOOL  _nodelay;       /* input character wait flag */
+    PDC_BOOL  _immed;         /* immediate update flag */
+    PDC_BOOL  _sync;          /* synchronise window ancestors */
+    PDC_BOOL  _use_keypad;    /* flags keypad key mode active */
     chtype **_y;          /* pointer to line pointer array */
     int   *_firstch;      /* first changed character in line */
     int   *_lastch;       /* last changed character in line */
@@ -319,16 +314,16 @@ typedef struct _win       /* definition of a window */
 
 typedef struct
 {
-    bool  alive;          /* if initscr() called, and not endwin() */
-    bool  autocr;         /* if cr -> lf */
-    bool  cbreak;         /* if terminal unbuffered */
-    bool  echo;           /* if terminal echo */
-    bool  raw_inp;        /* raw input mode (v. cooked input) */
-    bool  raw_out;        /* raw output mode (7 v. 8 bits) */
-    bool  audible;        /* FALSE if the bell is visual */
-    bool  mono;           /* TRUE if current screen is mono */
-    bool  resized;        /* TRUE if TERM has been resized */
-    bool  orig_attr;      /* TRUE if we have the original colors */
+    PDC_BOOL  alive;          /* if initscr() called, and not endwin() */
+    PDC_BOOL  autocr;         /* if cr -> lf */
+    PDC_BOOL  cbreak;         /* if terminal unbuffered */
+    PDC_BOOL  echo;           /* if terminal echo */
+    PDC_BOOL  raw_inp;        /* raw input mode (v. cooked input) */
+    PDC_BOOL  raw_out;        /* raw output mode (7 v. 8 bits) */
+    PDC_BOOL  audible;        /* FALSE if the bell is visual */
+    PDC_BOOL  mono;           /* TRUE if current screen is mono */
+    PDC_BOOL  resized;        /* TRUE if TERM has been resized */
+    PDC_BOOL  orig_attr;      /* TRUE if we have the original colors */
     short orig_fore;      /* original screen foreground color */
     short orig_back;      /* original screen foreground color */
     int   cursrow;        /* position of physical cursor */
@@ -349,19 +344,19 @@ typedef struct
                                       top via ripoffline() */
     int   delaytenths;             /* 1/10ths second to wait block
                                       getch() for */
-    bool  _preserve;               /* TRUE if screen background
+    PDC_BOOL  _preserve;               /* TRUE if screen background
                                       to be preserved */
     int   _restore;                /* specifies if screen background
                                       to be restored, and how */
-    bool  save_key_modifiers;      /* TRUE if each key modifiers saved
+    PDC_BOOL  save_key_modifiers;      /* TRUE if each key modifiers saved
                                       with each key press */
-    bool  return_key_modifiers;    /* TRUE if modifier keys are
+    PDC_BOOL  return_key_modifiers;    /* TRUE if modifier keys are
                                       returned as "real" keys */
-    bool  key_code;                /* TRUE if last key is a special key;
+    PDC_BOOL  key_code;                /* TRUE if last key is a special key;
                                       used internally by get_wch() */
 #ifdef XCURSES
     int   XcurscrSize;    /* size of Xcurscr shared memory block */
-    bool  sb_on;
+    PDC_BOOL  sb_on;
     int   sb_viewport_y;
     int   sb_viewport_x;
     int   sb_total_y;
@@ -1108,10 +1103,10 @@ int     bkgd(chtype);
 void    bkgdset(chtype);
 int     border(chtype, chtype, chtype, chtype, chtype, chtype, chtype, chtype);
 int     box(WINDOW *, chtype, chtype);
-bool    can_change_color(void);
+PDC_BOOL    can_change_color(void);
 int     cbreak(void);
 int     chgat(int, attr_t, short, const void *);
-int     clearok(WINDOW *, bool);
+int     clearok(WINDOW *, PDC_BOOL);
 int     clear(void);
 int     clrtobot(void);
 int     clrtoeol(void);
@@ -1142,13 +1137,13 @@ int     getnstr(char *, int);
 int     getstr(char *);
 WINDOW *getwin(FILE *);
 int     halfdelay(int);
-bool    has_colors(void);
-bool    has_ic(void);
-bool    has_il(void);
+PDC_BOOL    has_colors(void);
+PDC_BOOL    has_ic(void);
+PDC_BOOL    has_il(void);
 int     hline(chtype, int);
-void    idcok(WINDOW *, bool);
-int     idlok(WINDOW *, bool);
-void    immedok(WINDOW *, bool);
+void    idcok(WINDOW *, PDC_BOOL);
+int     idlok(WINDOW *, PDC_BOOL);
+void    immedok(WINDOW *, PDC_BOOL);
 int     inchnstr(chtype *, int);
 int     inchstr(chtype *);
 chtype  inch(void);
@@ -1162,16 +1157,16 @@ int     insertln(void);
 int     insnstr(const char *, int);
 int     insstr(const char *);
 int     instr(char *);
-int     intrflush(WINDOW *, bool);
-bool    isendwin(void);
-bool    is_linetouched(WINDOW *, int);
-bool    is_wintouched(WINDOW *);
+int     intrflush(WINDOW *, PDC_BOOL);
+PDC_BOOL    isendwin(void);
+PDC_BOOL    is_linetouched(WINDOW *, int);
+PDC_BOOL    is_wintouched(WINDOW *);
 char   *keyname(int);
-int     keypad(WINDOW *, bool);
+int     keypad(WINDOW *, PDC_BOOL);
 char    killchar(void);
-int     leaveok(WINDOW *, bool);
+int     leaveok(WINDOW *, PDC_BOOL);
 char   *longname(void);
-int     meta(WINDOW *, bool);
+int     meta(WINDOW *, PDC_BOOL);
 int     move(int, int);
 int     mvaddch(int, int, const chtype);
 int     mvaddchnstr(int, int, const chtype *, int);
@@ -1226,12 +1221,12 @@ SCREEN *newterm(const char *, FILE *, FILE *);
 WINDOW *newwin(int, int, int, int);
 int     nl(void);
 int     nocbreak(void);
-int     nodelay(WINDOW *, bool);
+int     nodelay(WINDOW *, PDC_BOOL);
 int     noecho(void);
 int     nonl(void);
 void    noqiflush(void);
 int     noraw(void);
-int     notimeout(WINDOW *, bool);
+int     notimeout(WINDOW *, PDC_BOOL);
 int     overlay(const WINDOW *, WINDOW *);
 int     overwrite(const WINDOW *, WINDOW *);
 int     pair_content(short, short *, short *);
@@ -1256,7 +1251,7 @@ int     scr_restore(const char *);
 int     scr_set(const char *);
 int     scrl(int);
 int     scroll(WINDOW *);
-int     scrollok(WINDOW *, bool);
+int     scrollok(WINDOW *, PDC_BOOL);
 SCREEN *set_term(SCREEN *);
 int     setscrreg(int, int);
 int     slk_attroff(const chtype);
@@ -1279,7 +1274,7 @@ int     standout(void);
 int     start_color(void);
 WINDOW *subpad(WINDOW *, int, int, int, int);
 WINDOW *subwin(WINDOW *, int, int, int, int);
-int     syncok(WINDOW *, bool);
+int     syncok(WINDOW *, PDC_BOOL);
 chtype  termattrs(void);
 attr_t  term_attrs(void);
 char   *termname(void);
@@ -1288,7 +1283,7 @@ int     touchline(WINDOW *, int, int);
 int     touchwin(WINDOW *);
 int     typeahead(int);
 int     untouchwin(WINDOW *);
-void    use_env(bool);
+void    use_env(PDC_BOOL);
 int     vidattr(chtype);
 int     vid_attr(attr_t, short, void *);
 int     vidputs(chtype, int (*)(int));
@@ -1489,23 +1484,23 @@ unsigned long getbmap(void);
 
 int     assume_default_colors(int, int);
 const char *curses_version(void);
-bool    has_key(int);
+PDC_BOOL    has_key(int);
 int     use_default_colors(void);
 int     wresize(WINDOW *, int, int);
 
 int     mouseinterval(int);
 mmask_t mousemask(mmask_t, mmask_t *);
-bool    mouse_trafo(int *, int *, bool);
+PDC_BOOL    mouse_trafo(int *, int *, PDC_BOOL);
 int     nc_getmouse(MEVENT *);
 int     ungetmouse(MEVENT *);
-bool    wenclose(const WINDOW *, int, int);
-bool    wmouse_trafo(const WINDOW *, int *, int *, bool);
+PDC_BOOL    wenclose(const WINDOW *, int, int);
+PDC_BOOL    wmouse_trafo(const WINDOW *, int *, int *, PDC_BOOL);
 
 /* PDCurses */
 
 int     addrawch(chtype);
 int     insrawch(chtype);
-bool    is_termresized(void);
+PDC_BOOL    is_termresized(void);
 int     mvaddrawch(int, int, chtype);
 int     mvdeleteln(int, int);
 int     mvinsertln(int, int);
@@ -1514,7 +1509,7 @@ int     mvwaddrawch(WINDOW *, int, int, chtype);
 int     mvwdeleteln(WINDOW *, int, int);
 int     mvwinsertln(WINDOW *, int, int);
 int     mvwinsrawch(WINDOW *, int, int, chtype);
-int     raw_output(bool);
+int     raw_output(PDC_BOOL);
 int     resize_term(int, int);
 WINDOW *resize_window(WINDOW *, int, int);
 int     waddrawch(WINDOW *, chtype);
@@ -1527,7 +1522,7 @@ wchar_t *slk_wlabel(int);
 
 void    PDC_debug(const char *, ...);
 int     PDC_ungetch(int);
-int     PDC_set_blink(bool);
+int     PDC_set_blink(PDC_BOOL);
 int     PDC_set_line_color(short);
 void    PDC_set_title(const char *);
 
@@ -1538,8 +1533,8 @@ int     PDC_setclipboard(const char *, long);
 
 unsigned long PDC_get_input_fd(void);
 unsigned long PDC_get_key_modifiers(void);
-int     PDC_return_key_modifiers(bool);
-int     PDC_save_key_modifiers(bool);
+int     PDC_return_key_modifiers(PDC_BOOL);
+int     PDC_save_key_modifiers(PDC_BOOL);
 void    PDC_set_resize_limits( const int new_min_lines,
                                const int new_max_lines,
                                const int new_min_cols,
@@ -1595,7 +1590,7 @@ int     sb_refresh(void);
 #define PDC_KEY_MODIFIER_NUMLOCK 8
 
 #if defined(__cplusplus) || defined(__cplusplus__) || defined(__CPLUSPLUS)
-# undef bool
+# undef PDC_BOOL
 }
 #endif
 
